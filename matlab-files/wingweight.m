@@ -1,0 +1,59 @@
+
+function [y] = wingweight(xx)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% WING WEIGHT FUNCTION
+%
+% Authors: Sonja Surjanovic, Simon Fraser University
+%          Derek Bingham, Simon Fraser University
+% Questions/Comments: Please email Derek Bingham at dbingham@stat.sfu.ca.
+%
+% Copyright 2013. Derek Bingham, Simon Fraser University.
+%
+% THERE IS NO WARRANTY, EXPRESS OR IMPLIED. WE DO NOT ASSUME ANY LIABILITY
+% FOR THE USE OF THIS SOFTWARE.  If software is modified to produce
+% derivative works, such modified software should be clearly marked.
+% Additionally, this program is free software; you can redistribute it 
+% and/or modify it under the terms of the GNU General Public License as 
+% published by the Free Software Foundation; version 2.0 of the License. 
+% Accordingly, this program is distributed in the hope that it will be 
+% useful, but WITHOUT ANY WARRANTY; without even the implied warranty 
+% of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+% General Public License for more details.
+%
+% For function details and reference information, see:
+% 
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% OUTPUT AND INPUT:
+%
+% y  = wing weight
+% xx = [Sw, Wfw, A, LamCaps, q, lam, tc, Nz, Wdg, Wp]
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Sw      = 150 + (200 - 150) * xx(:,1);
+Wfw     = 220 + (300 - 220) * xx(:,2);
+A       = 6 +  (10 - 6) *  xx(:,3);
+LamCaps = -10 + (10 + 10) * xx(:,4);
+q       = 16 + (45 - 16) * xx(:,5);
+lam     = 0.5 + ( 1 - .5) * xx(:,6);
+tc      = 0.08 + (.18 - .08) * xx(:,7);
+Nz      = 2.5 + (6 - 2.5) * xx(:,8);
+Wdg     = 1700 + (2500 - 1700) * xx(:,9);
+Wp      = 0.025 + (.08 - .025) * xx(:,10);
+
+fact1 = 0.036 * Sw.^0.758 .* Wfw.^0.0035;
+fact2 = (A ./ ((cosd(LamCaps))^2)).^0.6;
+fact3 = q.^0.006 .* lam.^0.04;
+fact4 = (100*tc ./ cosd(LamCaps)).^(-0.3);
+fact5 = (Nz.*Wdg).^0.49;
+
+term1 = Sw .* Wp;
+
+y = fact1.*fact2.*fact3.*fact4.*fact5 + term1;
+
+end
+
